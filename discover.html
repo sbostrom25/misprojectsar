@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover UMD - Sarah's Portfolio</title>
+    <link rel="stylesheet" href="CSS/styles.css">
+    <style>
+        .discover-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #d4a373;
+            font-size: 2.5rem;
+            margin: 2rem 0 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #d4a373;
+        }
+
+        .sections-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .section-card {
+            flex: 1;
+            min-width: 300px;
+            max-width: 380px;
+            background-color: #faf3e0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(107, 68, 35, 0.1);
+            padding: 1.5rem;
+            border: 1px solid #d4a373;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: #d4a373;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #d4a373;
+        }
+
+        .section-text {
+            color: #6b4423;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        @media (max-width: 1024px) {
+            .section-card {
+                min-width: 45%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section-card {
+                min-width: 100%;
+            }
+        }
+
+        .video-section {
+            margin: 4rem auto;
+            max-width: 800px;
+            background-color: #faf3e0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(107, 68, 35, 0.1);
+            padding: 2rem;
+            border: 1px solid #d4a373;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 177.78%; /* 6:8 aspect ratio */
+            margin: 0 auto;
+        }
+
+        .video-container video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .video-title {
+            color: #d4a373;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #d4a373;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="hobbies.html">Hobbies</a></li>
+            <li><a href="discover.html">Discover UMD</a></li>
+            <li><a href="resume.html">Resume</a></li>
+            <li><a href="career.html">Career</a></li>
+            <li><a href="game.html">Game</a></li>
+        </ul>
+    </nav>
+
+    <main class="discover-container">
+        <h1 class="page-title">Discover UMD</h1>
+        
+        <div class="sections-grid">
+            <!-- Why UMD Section -->
+            <div class="section-card">
+                <h2 class="section-title">Why UMD</h2>
+                <div class="section-text">
+                    <p>I chose the University of Minnesota Duluth for a few main reasons:</p>
+                    <p>1. It is close to my home so I can easily go back home when necessary.</p>
+                    <p>2. It has an awesome Catholic Newman Center, which was very important to me because my faith is my number one priority.</p>
+                    <p>3. They have a Marketing + Graphic Design degree which was the perfect combination of a major for me as I wanted the mix of a business and design degree.</p>
+                </div>
+            </div>
+
+            <!-- Why Duluth Section -->
+            <div class="section-card">
+                <h2 class="section-title">Why Duluth</h2>
+                <div class="section-text">
+                    <p>Duluth is a super fun area to live. I love the beauty and character of the place. My favorite parts about it are the lake, the lake walk, the beauty of all the surrounding nature, the hiking, and the fun coffee shops and fun buildings that have so much character.</p>
+                </div>
+            </div>
+
+            <!-- Experiences Section -->
+            <div class="section-card">
+                <h2 class="section-title">Experiences + Highlights</h2>
+                <div class="section-text">
+                    <p>Some of my favorite experiences in the area + on campus have been all my time at the Newman center + neighboring churches, enjoying all the different and fun coffee shops, spending time with friends + having game nights, practicing music with a friend on campus, taking walks around the beautiful neighborhoods and local hiking trails, photographing people in the beautiful areas of Duluth, making fun projects in my design classes, and having good conversations with other students on campus.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video Section -->
+        <div class="video-section">
+            <h2 class="video-title">MIS Team Video</h2>
+            <div class="video-container">
+                <video controls>
+                    <source src="files/MISteamvideo.MOV" type="video/quicktime">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Sarah. All rights reserved.</p>
+    </footer>
+</body>
+</html>
