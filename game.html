@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Flappy Bulldog Game</title>
+   <link rel="stylesheet" href="CSS/styles.css">
+   <style>
+       * {
+           margin: 0;
+           padding: 0;
+           box-sizing: border-box;
+       }
+
+
+       body {
+           font-family: 'Arial', sans-serif;
+           /* warm cream -> tan */
+           background: linear-gradient(to bottom, #F6EDE6 0%, #D8C3A5 100%);
+           min-height: 100vh;
+           margin: 0;
+           display: flex;
+           flex-direction: column;
+       }
+
+
+       main {
+           flex: 1;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           padding: 60px 0;
+       }
+
+
+       .game-container {
+           position: relative;
+           border: 3px solid #E07A5F; /* rustic orange */
+           border-radius: 10px;
+           box-shadow: 0 10px 30px rgba(224, 122, 95, 0.12);
+           background: #F6EDE6; /* cream */
+       }
+
+
+       #gameCanvas {
+           display: block;
+           /* soft pastel gradient for the playfield */
+           background: linear-gradient(to bottom, #C9E4C5 0%, #F7D6D0 100%);
+           border-radius: 6px;
+       }
+
+
+       .game-ui {
+           position: absolute;
+           top: 20px;
+           left: 20px;
+           color: #5A3920; /* dark brown text */
+           font-size: 24px;
+           font-weight: bold;
+           text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+           z-index: 10;
+       }
+
+
+       .game-over {
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           transform: translate(-50%, -50%);
+           background: rgba(90,57,32,0.95); /* dark brown panel */
+           color: #F6EDE6; /* cream text */
+           padding: 30px;
+           border-radius: 15px;
+           text-align: center;
+           display: none;
+           z-index: 20;
+           border: 2px solid #E07A5F; /* rustic orange */
+       }
+
+
+       .game-over h2 {
+           margin-bottom: 20px;
+           font-size: 32px;
+       }
+
+
+       .game-over p {
+           margin-bottom: 15px;
+           font-size: 18px;
+       }
+
+
+       .restart-btn {
+           background: #E07A5F; /* rustic orange */
+           color: #F6EDE6; /* cream */
+           border: none;
+           padding: 12px 24px;
+           font-size: 18px;
+           border-radius: 8px;
+           cursor: pointer;
+           transition: background 0.25s ease;
+           font-weight: bold;
+       }
+
+
+       .restart-btn:hover {
+           background: #cf6a4a;
+       }
+
+
+       .start-screen {
+           position: absolute;
+           top: 50%;
+           left: 50%;
+           transform: translate(-50%, -50%);
+           background: rgba(246,237,230,0.98); /* light cream panel */
+           color: #5A3920; /* dark text */
+           padding: 30px;
+           border-radius: 15px;
+           text-align: center;
+           z-index: 20;
+           border: 2px solid #E07A5F;
+           box-shadow: 0 8px 20px rgba(90,57,32,0.08);
+       }
+
+
+       .start-screen h1 {
+           margin-bottom: 20px;
+           font-size: 36px;
+           color: #E07A5F;
+       }
+
+
+       .start-screen p {
+           margin-bottom: 15px;
+           font-size: 18px;
+       }
+
+
+       .start-btn {
+           background: #E07A5F;
+           color: #F6EDE6;
+           border: none;
+           padding: 12px 24px;
+           font-size: 18px;
+           border-radius: 8px;
+           cursor: pointer;
+           transition: background 0.25s ease;
+           font-weight: bold;
+       }
+
+
+       .start-btn:hover {
+           background: #cf6a4a;
+       }
+
+
+       .instructions {
+           position: absolute;
+           bottom: 20px;
+           left: 50%;
+           transform: translateX(-50%);
+           color: #5A3920;
+           text-align: center;
+           font-size: 16px;
+           text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+           z-index: 10;
+       }
+
+
+       @media (max-width: 768px) {
+           .game-container {
+               width: 90vw;
+               height: 60vh;
+           }
+          
+           #gameCanvas {
+               width: 100%;
+               height: 100%;
+           }
+          
+           .game-ui {
+               font-size: 20px;
+           }
+          
+           .start-screen h1 {
+               font-size: 28px;
+           }
+          
+           .game-over h2 {
+               font-size: 24px;
+           }
+       }
+   </style>
+</head>
+<body>
+   <!-- Navigation Menu -->
+   <nav>
+       <ul>
+           <li><a href="index.html">Home</a></li>
+           <li><a href="hobbies.html">Hobbies</a></li>
+           <li><a href="discover.html">Discover UMD</a></li>
+           <li><a href="resume.html">Resume</a></li>
+           <li><a href="career.html">Career</a></li>
+           <li><a href="game.html">Game</a></li>
+       </ul>
+   </nav>
+
+
+   <main>
+       <div class="game-container">
+           <canvas id="gameCanvas" width="400" height="600"></canvas>
+          
+           <div class="game-ui">
+               <div>Score: <span id="score">0</span></div>
+               <div>High Score: <span id="highScore">0</span></div>
+               <button id="muteBtn" class="start-btn" style="margin-left:12px;padding:6px 10px;font-size:14px;">🔊</button>
+           </div>
+
+
+           <div class="start-screen" id="startScreen">
+               <h1>🐕 Flappy Bulldog</h1>
+               <p>Press SPACE or click to jump!</p>
+               <p>Avoid the obstacles and get the highest score!</p>
+               <button class="start-btn" onclick="startGame()">Start Game</button>
+           </div>
+
+
+           <div class="game-over" id="gameOver">
+               <h2>Game Over!</h2>
+               <p>Your Score: <span id="finalScore">0</span></p>
+               <p>High Score: <span id="finalHighScore">0</span></p>
+               <button class="restart-btn" onclick="restartGame()">Play Again</button>
+           </div>
+
+
+           <div class="instructions" id="instructions">
+               Press SPACE or click to make the bulldog jump!
+           </div>
+       </div>
+   </main>
+
+
+   <script>
+       // Game variables
+       const canvas = document.getElementById('gameCanvas');
+       const ctx = canvas.getContext('2d');
+      
+    // Game state
+       let gameState = 'start'; // 'start', 'playing', 'gameOver'
+       let score = 0;
+       let highScore = localStorage.getItem('flappyBulldogHighScore') || 0;
+       let gameSpeed = 2;
+
+    // Background music
+    const bgMusic = new Audio('files/musicforgame.mp3');
+    bgMusic.loop = true;
+    bgMusic.volume = 0.45;
+    let musicMuted = localStorage.getItem('flappyBulldogMusicMuted') === 'true';
+    bgMusic.muted = musicMuted;
+      
+       // Bulldog object
+       const bulldog = {
+           x: 80,
+           y: canvas.height / 2,
+           width: 35,
+           height: 30,
+           velocity: 0,
+           gravity: 0.5,
+           jumpPower: -8,
+           color: '#7B4F3A' // warm brown
+       };
+      
+       // Pipes array
+       let pipes = [];
+    const pipeWidth = 60;
+    // Make the pipe gap larger and responsive to canvas size so it's easier to pass
+    // Use roughly 32% of canvas height with a sensible minimum
+    let pipeGap = Math.max(140, Math.floor(canvas.height * 0.32));
+    // Space pipes based on canvas width
+    let pipeSpacing = Math.max(180, Math.floor(canvas.width * 0.5));
+      
+       // Power-ups (minimal definitions to avoid runtime errors)
+       let powerUps = [];
+       const powerUpTypes = {
+           SLOW_MOTION: { duration: 5000, color: '#00BFFF' },
+           INVINCIBLE: { duration: 5000, color: '#FFD700' },
+           SCORE_MULTIPLIER: { duration: 5000, color: '#FF69B4' },
+           MAGNET: { duration: 5000, color: '#FF4500' }
+       };
+
+       const activePowerUps = {
+           slowMotion: { active: false, endTime: 0 },
+           invincible: { active: false, endTime: 0 },
+           scoreMultiplier: { active: false, endTime: 0 },
+           magnet: { active: false, endTime: 0 }
+       };
+
+       // Update high score display
+       document.getElementById('highScore').textContent = highScore;
+      
+       // Game functions
+       function startGame() {
+           gameState = 'playing';
+           document.getElementById('startScreen').style.display = 'none';
+           document.getElementById('instructions').style.display = 'none';
+           resetGame();
+          // play background music when game starts
+           if (!bgMusic.muted) {
+               const p = bgMusic.play();
+               if (p && p.catch) p.catch(() => {/* autoplay blocked */});
+           }
+           gameLoop();
+       }
+      
+       function resetGame() {
+           bulldog.y = canvas.height / 2;
+           bulldog.velocity = 0;
+           pipes = [];
+           score = 0;
+           gameSpeed = 2;
+           updateScore();
+       }
+      
+       function restartGame() {
+           gameState = 'start';
+           document.getElementById('gameOver').style.display = 'none';
+           document.getElementById('startScreen').style.display = 'block';
+           document.getElementById('instructions').style.display = 'block';
+       }
+      
+       function gameOver() {
+           gameState = 'gameOver';
+           if (score > highScore) {
+               highScore = score;
+               localStorage.setItem('flappyBulldogHighScore', highScore);
+               document.getElementById('highScore').textContent = highScore;
+           }
+           document.getElementById('finalScore').textContent = score;
+           document.getElementById('finalHighScore').textContent = highScore;
+           document.getElementById('gameOver').style.display = 'block';
+          // pause music on game over
+           try { bgMusic.pause(); } catch (e) {}
+       }
+      
+       function updateScore() {
+           document.getElementById('score').textContent = score;
+       }
+      
+       function jump() {
+           if (gameState === 'playing') {
+               bulldog.velocity = bulldog.jumpPower;
+           }
+       }
+      
+       function createPipe() {
+           const pipeHeight = Math.random() * (canvas.height - pipeGap - 100) + 50;
+           pipes.push({
+               x: canvas.width,
+               topHeight: pipeHeight,
+               bottomY: pipeHeight + pipeGap,
+               bottomHeight: canvas.height - (pipeHeight + pipeGap),
+               passed: false
+           });
+       }
+      
+       function createPowerUp() {
+           const types = Object.keys(powerUpTypes);
+           const randomType = types[Math.floor(Math.random() * types.length)];
+           const powerUp = powerUpTypes[randomType];
+          
+           powerUps.push({
+               x: canvas.width + 50,
+               y: Math.random() * (canvas.height - 100) + 50,
+               type: randomType,
+               color: powerUp.color,
+               size: 20,
+               bobOffset: Math.random() * Math.PI * 2 // For floating animation
+           });
+       }
+      
+       function activatePowerUp(type) {
+           const powerUp = powerUpTypes[type];
+           const currentTime = Date.now();
+          
+           switch (type) {
+               case 'SLOW_MOTION':
+                   activePowerUps.slowMotion.active = true;
+                   activePowerUps.slowMotion.endTime = currentTime + powerUp.duration;
+                   break;
+               case 'INVINCIBLE':
+                   activePowerUps.invincible.active = true;
+                   activePowerUps.invincible.endTime = currentTime + powerUp.duration;
+                   break;
+               case 'SCORE_MULTIPLIER':
+                   activePowerUps.scoreMultiplier.active = true;
+                   activePowerUps.scoreMultiplier.endTime = currentTime + powerUp.duration;
+                   break;
+               case 'MAGNET':
+                   activePowerUps.magnet.active = true;
+                   activePowerUps.magnet.endTime = currentTime + powerUp.duration;
+                   break;
+           }
+       }
+      
+       function updatePowerUps() {
+           if (gameState === 'playing') {
+               const currentTime = Date.now();
+              
+               // Apply slow motion effect to power-up movement
+               const speedMultiplier = activePowerUps.slowMotion.active ? 0.3 : 1;
+               const currentGameSpeed = gameSpeed * speedMultiplier;
+              
+               // Update power-up positions
+               for (let i = powerUps.length - 1; i >= 0; i--) {
+                   powerUps[i].x -= currentGameSpeed;
+                   powerUps[i].bobOffset += 0.1; // For floating animation
+                  
+                   // Remove power-ups that are off screen
+                   if (powerUps[i].x + 20 < 0) {
+                       powerUps.splice(i, 1);
+                   }
+               }
+              
+               // Check if power-ups have expired
+               if (activePowerUps.slowMotion.active && currentTime > activePowerUps.slowMotion.endTime) {
+                   activePowerUps.slowMotion.active = false;
+               }
+               if (activePowerUps.invincible.active && currentTime > activePowerUps.invincible.endTime) {
+                   activePowerUps.invincible.active = false;
+               }
+               if (activePowerUps.scoreMultiplier.active && currentTime > activePowerUps.scoreMultiplier.endTime) {
+                   activePowerUps.scoreMultiplier.active = false;
+               }
+               if (activePowerUps.magnet.active && currentTime > activePowerUps.magnet.endTime) {
+                   activePowerUps.magnet.active = false;
+               }
+           }
+       }
+      
+       function updateBulldog() {
+           if (gameState === 'playing') {
+               bulldog.velocity += bulldog.gravity;
+               bulldog.y += bulldog.velocity;
+              
+               // Check ground and ceiling collision
+               if (bulldog.y + bulldog.height > canvas.height || bulldog.y < 0) {
+                   gameOver();
+               }
+           }
+       }
+      
+       function updatePipes() {
+           if (gameState === 'playing') {
+               // Move pipes
+               for (let i = pipes.length - 1; i >= 0; i--) {
+                   pipes[i].x -= gameSpeed;
+                  
+                   // Remove pipes that are off screen
+                   if (pipes[i].x + pipeWidth < 0) {
+                       pipes.splice(i, 1);
+                   }
+                  
+                   // Check if bulldog passed pipe
+                   if (!pipes[i].passed && pipes[i].x + pipeWidth < bulldog.x) {
+                       pipes[i].passed = true;
+                       score += 1;
+                       updateScore();
+                       gameSpeed += 0.1; // Increase difficulty
+                   }
+               }
+              
+               // Create new pipes
+               if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - pipeSpacing) {
+                   createPipe();
+               }
+           }
+       }
+      
+       function checkCollisions() {
+           if (gameState === 'playing') {
+               // Check pipe collisions
+               for (let pipe of pipes) {
+                   // Check collision with top pipe
+                   if (bulldog.x < pipe.x + pipeWidth &&
+                       bulldog.x + bulldog.width > pipe.x &&
+                       bulldog.y < pipe.topHeight) {
+                       gameOver();
+                   }
+                  
+                   // Check collision with bottom pipe
+                   if (bulldog.x < pipe.x + pipeWidth &&
+                       bulldog.x + bulldog.width > pipe.x &&
+                       bulldog.y + bulldog.height > pipe.bottomY) {
+                       gameOver();
+                   }
+               }
+           }
+       }
+      
+       function drawBulldog() {
+           // Draw bulldog body
+           ctx.fillStyle = bulldog.color;
+           ctx.fillRect(bulldog.x, bulldog.y, bulldog.width, bulldog.height);
+          
+           // Draw bulldog head (larger)
+           ctx.fillStyle = '#7B4F3A';
+           ctx.fillRect(bulldog.x - 5, bulldog.y - 8, 25, 20);
+          
+           // Draw ears
+           ctx.fillStyle = '#5A3920';
+           ctx.fillRect(bulldog.x - 3, bulldog.y - 10, 8, 12);
+           ctx.fillRect(bulldog.x + 12, bulldog.y - 10, 8, 12);
+          
+           // Draw snout
+           ctx.fillStyle = '#C48D7A';
+           ctx.fillRect(bulldog.x + 15, bulldog.y + 2, 12, 8);
+          
+           // Draw eyes
+           ctx.fillStyle = '#2B2B2B';
+           ctx.fillRect(bulldog.x + 2, bulldog.y - 2, 3, 3);
+           ctx.fillRect(bulldog.x + 8, bulldog.y - 2, 3, 3);
+          
+           // Draw nose
+           ctx.fillStyle = '#2B2B2B';
+           ctx.fillRect(bulldog.x + 20, bulldog.y + 4, 4, 3);
+          
+           // Draw mouth (wrinkles)
+           ctx.fillStyle = '#5A3920';
+           ctx.fillRect(bulldog.x + 5, bulldog.y + 8, 2, 1);
+           ctx.fillRect(bulldog.x + 8, bulldog.y + 8, 2, 1);
+           ctx.fillRect(bulldog.x + 11, bulldog.y + 8, 2, 1);
+          
+           // Reset effects
+           ctx.shadowBlur = 0;
+           ctx.globalAlpha = 1;
+       }
+      
+       function drawPowerUps() {
+           for (let powerUp of powerUps) {
+               const bobY = powerUp.y + Math.sin(powerUp.bobOffset) * 3;
+              
+               // Draw power-up with glow effect
+               ctx.shadowColor = powerUp.color;
+               ctx.shadowBlur = 10;
+               ctx.fillStyle = powerUp.color;
+               ctx.fillRect(powerUp.x, bobY, powerUp.size, powerUp.size);
+              
+               // Reset effects
+               ctx.shadowBlur = 0;
+           }
+       }
+
+
+
+       function drawPipes() {
+           // Rustic orange pipes with dark-brown caps
+           for (let pipe of pipes) {
+               ctx.fillStyle = '#E07A5F';
+               // Top pipe
+               ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
+               // Bottom pipe
+               ctx.fillRect(pipe.x, pipe.bottomY, pipeWidth, pipe.bottomHeight);
+              
+               // Pipe caps
+               ctx.fillStyle = '#5A3920';
+               ctx.fillRect(pipe.x - 5, pipe.topHeight - 20, pipeWidth + 10, 20);
+               ctx.fillRect(pipe.x - 5, pipe.bottomY, pipeWidth + 10, 20);
+           }
+       }
+      
+       function drawBackground() {
+           // pastel green -> pink gradient for playfield
+           const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+           gradient.addColorStop(0, '#C9E4C5');
+           gradient.addColorStop(1, '#F7D6D0');
+           ctx.fillStyle = gradient;
+           ctx.fillRect(0, 0, canvas.width, canvas.height);
+          
+           // Subtle cream dots for atmosphere
+           ctx.fillStyle = 'rgba(90,57,32,0.04)';
+           for (let i = 0; i < 6; i++) {
+               const x = (i * 120 + Date.now() * 0.01) % (canvas.width + 50) - 25;
+               const y = 40 + i * 60;
+               ctx.beginPath();
+               ctx.arc(x, y, 3, 0, Math.PI * 2);
+               ctx.fill();
+           }
+       }
+      
+       function drawStar(x, y) {
+           ctx.save();
+           ctx.translate(x, y);
+           ctx.beginPath();
+           for (let i = 0; i < 5; i++) {
+               ctx.lineTo(Math.cos((18 + i * 72) * Math.PI / 180) * 8, -Math.sin((18 + i * 72) * Math.PI / 180) * 8);
+               ctx.lineTo(Math.cos((54 + i * 72) * Math.PI / 180) * 3, -Math.sin((54 + i * 72) * Math.PI / 180) * 3);
+           }
+           ctx.closePath();
+           ctx.fill();
+           ctx.restore();
+       }
+      
+       function drawPowerUps() {
+           for (let powerUp of powerUps) {
+               const bobY = powerUp.y + Math.sin(powerUp.bobOffset) * 3;
+              
+               // Draw power-up with glow effect
+               ctx.shadowColor = powerUp.color;
+               ctx.shadowBlur = 10;
+               ctx.fillStyle = powerUp.color;
+               ctx.fillRect(powerUp.x, bobY, powerUp.size, powerUp.size);
+              
+               // Draw power-up icon
+               ctx.shadowBlur = 0;
+               ctx.fillStyle = '#FFFFFF';
+               ctx.font = '12px Arial';
+               ctx.textAlign = 'center';
+              
+               let icon = '';
+               switch (powerUp.type) {
+                   case 'SLOW_MOTION':
+                       icon = '⏰';
+                       break;
+                   case 'INVINCIBLE':
+                       icon = '🛡️';
+                       break;
+                   case 'SCORE_MULTIPLIER':
+                       icon = '⭐';
+                       break;
+                   case 'MAGNET':
+                       icon = '🧲';
+                       break;
+               }
+               ctx.fillText(icon, powerUp.x + powerUp.size/2, bobY + powerUp.size/2 + 4);
+           }
+       }
+      
+       function drawPowerUpIndicators() {
+           const currentTime = Date.now();
+           let yOffset = 80;
+          
+           // Draw active power-up indicators
+           if (activePowerUps.slowMotion.active) {
+               const timeLeft = Math.max(0, activePowerUps.slowMotion.endTime - currentTime);
+               drawPowerUpIndicator('⏰ Slow Motion', timeLeft, yOffset, '#00BFFF');
+               yOffset += 25;
+           }
+          
+           if (activePowerUps.invincible.active) {
+               const timeLeft = Math.max(0, activePowerUps.invincible.endTime - currentTime);
+               drawPowerUpIndicator('🛡️ Invincible', timeLeft, yOffset, '#FFD700');
+               yOffset += 25;
+           }
+          
+           if (activePowerUps.scoreMultiplier.active) {
+               const timeLeft = Math.max(0, activePowerUps.scoreMultiplier.endTime - currentTime);
+               drawPowerUpIndicator('⭐ 2x Score', timeLeft, yOffset, '#FF69B4');
+               yOffset += 25;
+           }
+          
+           if (activePowerUps.magnet.active) {
+               const timeLeft = Math.max(0, activePowerUps.magnet.endTime - currentTime);
+               drawPowerUpIndicator('🧲 Magnet', timeLeft, yOffset, '#FF4500');
+               yOffset += 25;
+           }
+       }
+      
+       function drawPowerUpIndicators() {
+           const currentTime = Date.now();
+           let yOffset = 80;
+          
+           // Draw active power-up indicators
+           Object.entries(activePowerUps).forEach(([key, powerUp]) => {
+               if (powerUp.active) {
+                   const timeLeft = Math.max(0, powerUp.endTime - currentTime);
+                   const barWidth = 150;
+                   const barHeight = 15;
+                  
+                   // Background bar
+                   ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                   ctx.fillRect(20, yOffset, barWidth, barHeight);
+                  
+                   // Progress bar
+                   const progress = timeLeft / 3000;
+                   const color = powerUpTypes[key.toUpperCase()]?.color || '#FFFFFF';
+                   ctx.fillStyle = color;
+                   ctx.fillRect(20, yOffset, barWidth * progress, barHeight);
+                  
+                   yOffset += 25;
+               }
+           });
+       }
+      
+       
+
+
+       function draw() {
+           // Clear canvas
+           ctx.clearRect(0, 0, canvas.width, canvas.height);
+          
+           // Draw background
+           drawBackground();
+          
+           // Draw game elements
+           drawPipes();
+           drawBulldog();
+       }
+      
+       function gameLoop() {
+           if (gameState === 'playing') {
+               updateBulldog();
+               updatePipes();
+               checkCollisions();
+           }
+          
+           draw();
+          
+           if (gameState === 'playing') {
+               requestAnimationFrame(gameLoop);
+           }
+       }
+      
+       // Event listeners
+       document.addEventListener('keydown', (e) => {
+           if (e.code === 'Space') {
+               e.preventDefault();
+               jump();
+           }
+       });
+      
+       canvas.addEventListener('click', jump);
+       canvas.addEventListener('touchstart', (e) => {
+           e.preventDefault();
+           jump();
+       });
+      
+       // Prevent scrolling on mobile
+       document.addEventListener('touchmove', (e) => {
+           e.preventDefault();
+       }, { passive: false });
+      
+      // Mute button handling
+      const muteBtn = document.getElementById('muteBtn');
+      function updateMuteButton() {
+          muteBtn.textContent = bgMusic.muted ? '🔇' : '🔊';
+      }
+      // initialize button state
+      updateMuteButton();
+      muteBtn.addEventListener('click', () => {
+          bgMusic.muted = !bgMusic.muted;
+          musicMuted = bgMusic.muted;
+          localStorage.setItem('flappyBulldogMusicMuted', musicMuted ? 'true' : 'false');
+          updateMuteButton();
+          // If unmuting while game is playing, ensure music is playing
+          if (!bgMusic.muted && gameState === 'playing') {
+              const p = bgMusic.play();
+              if (p && p.catch) p.catch(() => {});
+          }
+      });
+
+       // Initial draw
+       draw();
+   </script>
+</body>
+</html>

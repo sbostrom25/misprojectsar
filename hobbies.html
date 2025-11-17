@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sarah Bostrom - Hobbies</title>
+    <link rel="stylesheet" href="CSS/styles.css">
+    <style>
+        .hobbies-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #d4a373;
+            font-size: 2.5rem;
+            margin: 2rem 0 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #d4a373;
+        }
+
+        .hobbies-grid {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .hobby-card {
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+            background-color: #faf3e0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(107, 68, 35, 0.1);
+            padding: 1.5rem;
+            border: 1px solid #d4a373;
+        }
+
+        .hobby-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .hobby-title {
+            color: #d4a373;
+            font-size: 1.5rem;
+            margin: 1rem 0;
+            text-align: center;
+        }
+
+        .hobby-text {
+            color: #6b4423;
+            line-height: 1.6;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .hobby-text p {
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 1200px) {
+            .hobby-card {
+                min-width: 45%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hobby-card {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Menu (same on all pages) -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="hobbies.html">Hobbies</a></li>
+            <li><a href="discover.html">Discover UMD</a></li>
+            <li><a href="resume.html">Resume</a></li>
+            <li><a href="career.html">Career</a></li>
+            <li><a href="game.html">Game</a></li>
+        </ul>
+    </nav>
+
+    <main class="hobbies-container">
+        <h1 class="page-title">My Hobbies</h1>
+        
+        <div class="hobbies-grid">
+            <!-- Music Card -->
+            <div class="hobby-card">
+                <img src="files/pianopic.jpg" alt="Playing Piano" class="hobby-image">
+                <h2 class="hobby-title">Music</h2>
+                <div class="hobby-text">
+                    <p>Music is one of my favorite hobbies. I have been playing piano and singing for years, and have been involved in countless choirs, piano + voice recitals, singing for Church, and for all campus worship here at UMD as well.</p>
+                    <p>It was such a cool experience to participate in leading the All Campus Worship event at UMD. I got to lead music with a bunch of talented students who all love the Lord and it was so fun to make those connections and help lead all who came to a deeper Encounter with Christ.</p>
+                    <p>Music is important for many reasons. It brings me closer to the Lord, and is a gift He has given me so I glorify Him by using it. Music also makes me very happy and definitely speaks to me. I also like to work hard to become better at it, and the satisfaction of nailing a difficult piano piece or growing my vocal skills is such a satisfying and fun accomplishment.</p>
+                </div>
+            </div>
+
+            <!-- Photography Card -->
+            <div class="hobby-card">
+                <img src="files/camera.JPG" alt="Photography" class="hobby-image">
+                <h2 class="hobby-title">Photography</h2>
+                <div class="hobby-text">
+                    <p>I absolutely love photography, and have for years. I love capturing a variety of different things, but my favorite as of right now is couples + weddings.</p>
+                    <p>I recently was able to associate shoot a wedding for another photographer in the area, and it was so fun to be able to work with a sweet couple, and capture photos on the happiest day of their lives. The ability to create beauty through photos is such a gift and I'm so grateful to be a photographer.</p>
+                    <p>Photography is important to me because I get to capture peoples joy and love for one another, as well as capturing the beauty of God's creation. I would say those two things are so important, and I'm so grateful to be someone who gets to capture them. I also LOVE the creative aspect of photography. I love coming up with new artsy ideas and growing my creativity through fun poses, prompts, photos, & editing.</p>
+                </div>
+            </div>
+
+            <!-- Pickleball Card -->
+            <div class="hobby-card">
+                <img src="files/pickleball.JPG" alt="Playing Pickleball" class="hobby-image">
+                <h2 class="hobby-title">Pickleball</h2>
+                <div class="hobby-text">
+                    <p>I absolutely love pickleball. It is such a fun sport and is a great group activity to play with family + friends. I think one of the reasons I enjoy it so much is because I played tennis in high school, and once I learned how to play pickleball it was just an easier form of tennis and was easier to play with others who have never played before.</p>
+                    <p>I have so many fun memories of playing pickleball with my friends and having such a good time with them. This fall, I was playing a game with friends, and I had the winning shot which was pretty memorable. I was able to place the ball perfectly so my opponent could not get it.</p>
+                    <p>Pickleball is important to me because it is a sport I enjoy a lot. I love getting exercise especially while being outside and this is one way I can do that. It is a way I can connect with family and friends which is also important to me.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer (same on all pages) -->
+    <footer>
+        <p>&copy; 2025 Sarah Bostrom. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
